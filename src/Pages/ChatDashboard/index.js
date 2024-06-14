@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 const ChatDashboard = () => {
-  const [selectChat, setSelectChat] = useState(null);
+  const [selectChat, setSelectChat] = useState([]);
   const data = [
     {
       userId: "user1",
       name: "Sam",
       unreadCount: 1,
-      profilePictureURL:
-        "https://www.pexels.com/photo/portrait-photo-of-smiling-man-with-his-arms-crossed-standing-in-front-of-a-wall-2379004/",
+      // profilePictureURL:
+      //   "https://www.pexels.com/photo/portrait-photo-of-smiling-man-with-his-arms-crossed-standing-in-front-of-a-wall-2379004/",
+      profilePictureURL: "assets/images/user-1.jpg",
       chat: [
         {
           user1: {
@@ -56,8 +57,9 @@ const ChatDashboard = () => {
       userId: "user2",
       name: "Elon",
       unreadCount: 0,
-      profilePictureURL:
-        "https://www.pexels.com/photo/man-in-brown-polo-shirt-614810/",
+      // profilePictureURL:
+      //   "https://www.pexels.com/photo/man-in-brown-polo-shirt-614810/",
+      profilePictureURL: "assets/images/user-2.jpg",
       chat: [
         {
           user2: {
@@ -96,11 +98,12 @@ const ChatDashboard = () => {
       userId: "user3",
       name: "Kate",
       unreadCount: 1,
-      profilePictureURL:
-        "https://www.pexels.com/photo/closeup-photo-of-woman-with-brown-coat-and-gray-top-733872/",
+      // profilePictureURL:
+      //   "https://www.pexels.com/photo/closeup-photo-of-woman-with-brown-coat-and-gray-top-733872/",
+      profilePictureURL: "assets/images/user-3.jpg",
       chat: [
         {
-          user2: {
+          user3: {
             message: "that burger was delicious!",
             timeStamp: "13:12",
           },
@@ -110,7 +113,7 @@ const ChatDashboard = () => {
           },
         },
         {
-          user2: {
+          user3: {
             message: "We are definetely going to that place again.",
             timeStamp: "13:13",
           },
@@ -120,7 +123,7 @@ const ChatDashboard = () => {
           },
         },
         {
-          user2: {
+          user3: {
             message: "haha, I bet. Lets take Tony and Natasha too next time",
             timeStamp: "13:14",
           },
@@ -134,7 +137,7 @@ const ChatDashboard = () => {
   ];
   console.log(data);
 
-  console.log(selectChat?.chat);
+  console.log(selectChat);
   return (
     <div>
       <div className="flex h-screen overflow-hidden">
@@ -174,7 +177,7 @@ const ChatDashboard = () => {
                 <div
                   className="flex items-center mb-4 cursor-pointer hover:bg-gray-100 p-2 rounded-md"
                   key={index}
-                  onClick={() => setSelectChat(i?.chat)}
+                  onClick={() => setSelectChat(i)}
                 >
                   <div className="w-12 h-12 bg-gray-300 rounded-full mr-3">
                     <img
@@ -199,153 +202,43 @@ const ChatDashboard = () => {
         </div>
         {selectChat ? (
           <div className="flex-1">
-            <header className="bg-white p-4 text-gray-700">
-              <h1 className="text-2xl font-semibold">{selectChat?.name}</h1>
+            <header className="bg-[#fafafa] p-4 text-gray-700">
+              <div className="flex">
+                <div className="flex items-center gap-4 w-12 h-12 bg-gray-300 rounded-full mr-3 ">
+                  <img
+                    src={selectChat?.profilePictureURL}
+                    alt="User Avatar"
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                </div>
+                <h1 className="text-2xl font-semibold text-start">
+                  {selectChat?.name}
+                </h1>
+              </div>
+              <div></div>
             </header>
-
             <div className="h-screen overflow-y-auto p-4 pb-36">
-              <div className="flex mb-4 cursor-pointer">
-                <div className="flex max-w-96 bg-[#fafafa] rounded-3xl p-3 gap-3">
-                  <p className="text-gray-700">
-                    {selectChat?.chat?.userId?.message}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex justify-end mb-4 cursor-pointer">
-                <div className="flex max-w-96 bg-[#dcf6c6] text-black rounded-3xl p-3 gap-3">
-                  <p>
-                    Hi Alice! I'm good, just finished a great book. How about
-                    you?
-                  </p>
-                  <div className="text-end flex items-end">13:45</div>
-                </div>
-              </div>
-
-              <div className="flex mb-4 cursor-pointer">
-                <div className="w-9 h-9 rounded-full flex items-center justify-center mr-2">
-                  <img
-                    src="https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
-                    alt="User Avatar"
-                    className="w-8 h-8 rounded-full"
-                  />
-                </div>
-                <div className="flex max-w-96 bg-white rounded-lg p-3 gap-3">
-                  <p className="text-gray-700">
-                    That book sounds interesting! What's it about?
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex justify-end mb-4 cursor-pointer">
-                <div className="flex max-w-96 bg-indigo-500 text-white rounded-lg p-3 gap-3">
-                  <p>
-                    It's about an astronaut stranded on Mars, trying to survive.
-                    Gripping stuff!
-                  </p>
-                </div>
-                <div className="w-9 h-9 rounded-full flex items-center justify-center ml-2">
-                  <img
-                    src="https://placehold.co/200x/b7a8ff/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
-                    alt="My Avatar"
-                    className="w-8 h-8 rounded-full"
-                  />
-                </div>
-              </div>
-
-              <div className="flex mb-4 cursor-pointer">
-                <div className="w-9 h-9 rounded-full flex items-center justify-center mr-2">
-                  <img
-                    src="https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
-                    alt="User Avatar"
-                    className="w-8 h-8 rounded-full"
-                  />
-                </div>
-                <div className="flex max-w-96 bg-white rounded-lg p-3 gap-3">
-                  <p className="text-gray-700">
-                    I'm intrigued! Maybe I'll borrow it from you when you're
-                    done?
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex justify-end mb-4 cursor-pointer">
-                <div className="flex max-w-96 bg-indigo-500 text-white rounded-lg p-3 gap-3">
-                  <p>Of course! I'll drop it off at your place tomorrow.</p>
-                </div>
-                <div className="w-9 h-9 rounded-full flex items-center justify-center ml-2">
-                  <img
-                    src="https://placehold.co/200x/b7a8ff/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
-                    alt="My Avatar"
-                    className="w-8 h-8 rounded-full"
-                  />
-                </div>
-              </div>
-
-              <div className="flex mb-4 cursor-pointer">
-                <div className="w-9 h-9 rounded-full flex items-center justify-center mr-2">
-                  <img
-                    src="https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
-                    alt="User Avatar"
-                    className="w-8 h-8 rounded-full"
-                  />
-                </div>
-                <div className="flex max-w-96 bg-white rounded-lg p-3 gap-3">
-                  <p className="text-gray-700">Thanks, you're the best!</p>
-                </div>
-              </div>
-
-              <div className="flex justify-end mb-4 cursor-pointer">
-                <div className="flex max-w-96 bg-indigo-500 text-white rounded-lg p-3 gap-3">
-                  <p>Anytime! Let me know how you like it. 😊</p>
-                </div>
-                <div className="w-9 h-9 rounded-full flex items-center justify-center ml-2">
-                  <img
-                    src="https://placehold.co/200x/b7a8ff/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
-                    alt="My Avatar"
-                    className="w-8 h-8 rounded-full"
-                  />
-                </div>
-              </div>
-
-              <div className="flex mb-4 cursor-pointer">
-                <div className="w-9 h-9 rounded-full flex items-center justify-center mr-2">
-                  <img
-                    src="https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
-                    alt="User Avatar"
-                    className="w-8 h-8 rounded-full"
-                  />
-                </div>
-                <div className="flex max-w-96 bg-white rounded-lg p-3 gap-3">
-                  <p className="text-gray-700">So, pizza next week, right?</p>
-                </div>
-              </div>
-
-              <div className="flex justify-end mb-4 cursor-pointer">
-                <div className="flex max-w-96 bg-indigo-500 text-white rounded-lg p-3 gap-3">
-                  <p>Absolutely! Can't wait for our pizza date. 🍕</p>
-                </div>
-                <div className="w-9 h-9 rounded-full flex items-center justify-center ml-2">
-                  <img
-                    src="https://placehold.co/200x/b7a8ff/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
-                    alt="My Avatar"
-                    className="w-8 h-8 rounded-full"
-                  />
-                </div>
-              </div>
-
-              <div className="flex mb-4 cursor-pointer">
-                <div className="w-9 h-9 rounded-full flex items-center justify-center mr-2">
-                  <img
-                    src="https://placehold.co/200x/ffa8e4/ffffff.svg?text=ʕ•́ᴥ•̀ʔ&font=Lato"
-                    alt="User Avatar"
-                    className="w-8 h-8 rounded-full"
-                  />
-                </div>
-                <div className="flex max-w-96 bg-white rounded-lg p-3 gap-3">
-                  <p className="text-gray-700">Hoorayy!!</p>
-                </div>
-              </div>
+              {selectChat?.chat?.map((chats, index) => {
+                return (
+                  <div key={index}>
+                    <div className="flex mb-4 cursor-pointer">
+                      <div className="flex max-w-96 bg-[#fafafa] rounded-3xl p-3 gap-3">
+                        <p className="text-gray-700">
+                          {chats?.[selectChat?.userId]?.message}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex justify-end mb-4 cursor-pointer">
+                      <div className="max-w-9/12 bg-[#dcf6c6] text-black rounded-3xl p-3 gap-3 text-start">
+                        <p>{chats?.you?.message}</p>
+                        <div className="text-end text-sm">
+                          {chats?.you?.timeStamp}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
 
             <footer className="bg-white border-t border-gray-300 p-4 absolute bottom-0 w-3/4">
