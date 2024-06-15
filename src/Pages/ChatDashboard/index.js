@@ -1,6 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Modal from "../../Component/Modal";
+import {
+  Description,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/react";
+import {
+  Popover,
+  PopoverButton,
+  PopoverPanel,
+  Transition,
+} from "@headlessui/react";
+
 const ChatDashboard = () => {
   const [selectChat, setSelectChat] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
   const data = [
     {
       userId: "user1",
@@ -137,72 +154,102 @@ const ChatDashboard = () => {
   ];
   console.log(data);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => {
+      window.addEventListener("resize", handleResize);
+    };
+  }, []);
   console.log(selectChat);
+
   return (
     <div>
       <div className="flex h-screen overflow-hidden">
-        <div className="w-1/4 bg-white border-r border-gray-300">
-          <header className="p-4 border-b border-gray-300 flex justify-between items-center  text-black">
-            <h1 className="text-2xl font-semibold">Chats</h1>
-            <div className="relative">
-              {/* <div
-                id="menuDropdown"
-                className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg hidden"
-              >
-                <ul className="py-2 px-3">
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-gray-800 hover:text-gray-400"
-                    >
-                      Option 1
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-gray-800 hover:text-gray-400"
-                    >
-                      Option 2
-                    </a>
-                  </li>
-                </ul>
-              </div> */}
-            </div>
-          </header>
+        {!isMobile && (
+          <div className="w-1/4 bg-white border-r border-gray-300">
+            <header className="p-4 border-b border-gray-300 flex justify-between items-center  text-black">
+              <h1 className="text-2xl font-semibold">Chats</h1>
+            </header>
 
-          <div className="overflow-y-auto h-screen p-3 mb-9 pb-20">
-            {data?.map((i, index) => {
-              return (
-                <div
-                  className="flex items-center mb-4 cursor-pointer hover:bg-gray-100 p-2 rounded-md"
-                  key={index}
-                  onClick={() => setSelectChat(i)}
-                >
-                  <div className="w-12 h-12 bg-gray-300 rounded-full mr-3">
-                    <img
-                      src={i?.profilePictureURL}
-                      alt="User Avatar"
-                      className="w-12 h-12 rounded-full"
-                    />
+            <div className="overflow-y-auto h-screen p-3 mb-9 pb-20">
+              {data?.map((i, index) => {
+                return (
+                  <div
+                    className="flex items-center mb-4 cursor-pointer hover:bg-gray-100 p-2 rounded-md"
+                    key={index}
+                    onClick={() => setSelectChat(i)}
+                  >
+                    <div className="w-12 h-12 bg-gray-300 rounded-full mr-3">
+                      <img
+                        src={i?.profilePictureURL}
+                        alt="User Avatar"
+                        className="w-12 h-12 rounded-full"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <h2 className="text-lg font-semibold text-start">
+                        {i?.name}
+                      </h2>
+                      <p className="text-gray-600 text-start">
+                        {i?.chat[0]?.user1?.message}
+                      </p>
+                    </div>
+
+                    <Popover>
+                      <PopoverButton className="text-sm/6 font-semibold text-black/50 focus:outline-none data-[active]:text-black data-[hover]:text-white data-[focus]:outline-1 data-[focus]:outline-white">
+                        <img
+                          className="w-4"
+                          src="assets/images/ellipsis.png"
+                          onClick={() => setOpen(true)}
+                        ></img>
+                      </PopoverButton>
+                      <Transition
+                        enter="transition ease-out duration-200"
+                        enterFrom="opacity-0 translate-y-1"
+                        enterTo="opacity-100 translate-y-0"
+                        leave="transition ease-in duration-150"
+                        leaveFrom="opacity-100 translate-y-0"
+                        leaveTo="opacity-0 translate-y-1"
+                      >
+                        <PopoverPanel
+                          anchor="bottom"
+                          className="divide-y divide-white/5 rounded-xl bg-white/5 text-sm/6 [--anchor-gap:var(--spacing-5)]"
+                        >
+                          <div className="p-3 bg-[#fafafa]">
+                            <div className="block rounded-lg py-2 px-3 transition cursor-pointer hover:bg-gray-100">
+                              <p className="font-semibold text-black">
+                                Mark as Unread
+                              </p>
+                            </div>
+                            <a
+                              className="block rounded-lg py-2 px-3 transition hover:bg-white/5"
+                              href="#"
+                            >
+                              <p className="font-semibold text-black">Delete</p>
+                            </a>
+                            <a
+                              className="block rounded-lg py-2 px-3 transition hover:bg-white/5"
+                              href="#"
+                            >
+                              <p className="font-semibold text-black">Cancel</p>
+                            </a>
+                          </div>
+                        </PopoverPanel>
+                      </Transition>
+                    </Popover>
                   </div>
-                  <div className="flex-1">
-                    <h2 className="text-lg font-semibold text-start">
-                      {i?.name}
-                    </h2>
-                    <p className="text-gray-600 text-start">
-                      {i?.chat[0]?.user1?.message}
-                    </p>
-                  </div>
-                  <img className="w-4" src="assets/images/ellipsis.png"></img>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
         {selectChat ? (
           <div className="flex-1">
-            <header className="bg-[#fafafa] p-4 text-gray-700">
+            <header className="bg-[#fafafa] p-2 text-gray-700">
               <div className="flex">
                 <div className="flex items-center gap-4 w-12 h-12 bg-gray-300 rounded-full mr-3 ">
                   <img
@@ -222,16 +269,19 @@ const ChatDashboard = () => {
                 return (
                   <div key={index}>
                     <div className="flex mb-4 cursor-pointer">
-                      <div className="flex max-w-96 bg-[#fafafa] rounded-3xl p-3 gap-3">
+                      <div className="max-w-9/12 bg-[#fafafa] rounded-2xl p-2 gap-3">
                         <p className="text-gray-700">
                           {chats?.[selectChat?.userId]?.message}
                         </p>
+                        <div className="text-end text-xs">
+                          {chats?.[selectChat?.userId]?.timeStamp}
+                        </div>
                       </div>
                     </div>
                     <div className="flex justify-end mb-4 cursor-pointer">
-                      <div className="max-w-9/12 bg-[#dcf6c6] text-black rounded-3xl p-3 gap-3 text-start">
+                      <div className="max-w-9/12 bg-[#dcf6c6] text-black rounded-2xl p-3 gap-3 text-start">
                         <p>{chats?.you?.message}</p>
-                        <div className="text-end text-sm">
+                        <div className="text-end text-xs">
                           {chats?.you?.timeStamp}
                         </div>
                       </div>
@@ -241,7 +291,7 @@ const ChatDashboard = () => {
               })}
             </div>
 
-            <footer className="bg-white border-t border-gray-300 p-4 absolute bottom-0 w-3/4">
+            <footer className="bg-white border-t border-gray-300 p-4 absolute bottom-0 lg:w-3/4 w-full">
               <div className="flex items-center">
                 <input
                   type="text"
