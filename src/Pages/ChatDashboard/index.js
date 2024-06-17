@@ -6,15 +6,15 @@ import {
   PopoverPanel,
   Transition,
 } from "@headlessui/react";
+import { json } from "react-router-dom";
 
 const ChatDashboard = () => {
   const [selectChat, setSelectChat] = useState([]);
   const [open, setOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [arrowBack, setArrowBack] = useState(false);
-  const [unread, setUnread] = useState();
-
-  const data = [
+  const [unread, setUnread] = useState({});
+  const [data, setData] = useState([
     {
       userId: "user1",
       name: "Sam",
@@ -147,8 +147,7 @@ const ChatDashboard = () => {
         },
       ],
     },
-  ];
-  console.log(data);
+  ]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -167,7 +166,10 @@ const ChatDashboard = () => {
   }, []);
   console.log(selectChat);
   console.log(isMobile);
-  /** arrow back function **/
+
+  /**
+   * arrow back function here
+   */
 
   const arrowBackClick = () => {
     if (window?.innerWidth < 768) {
@@ -178,10 +180,15 @@ const ChatDashboard = () => {
     }
   };
 
-  /** handle click for show all chats for one specific users **/
+  /***
+   * handle click for show all chats for one specific users
+   */
 
   const handleClick = (i) => {
-    setSelectChat(i);
+    setOpen(false);
+    if (open === false) {
+      setSelectChat(i);
+    }
     if (window?.innerWidth < 768) {
       const chatList = document?.getElementById("chatList");
       chatList.style.display = "none";
@@ -195,7 +202,27 @@ const ChatDashboard = () => {
     }
   };
 
-  console.log(isMobile, "isMobile");
+  console.log(open);
+  /**
+   * Unread Function here
+   */
+
+  const handleSetUnread = (userId) => {
+    setUnread((prevState) => ({
+      ...prevState,
+      [userId]: !prevState[userId],
+    }));
+    setOpen(false);
+  };
+
+  /***
+   * Delete function here
+   */
+
+  const handleDelete = (userId) => {
+    setData(data.filter((user) => user.userId !== userId));
+    setOpen(false);
+  };
 
   return (
     <div>
@@ -211,6 +238,7 @@ const ChatDashboard = () => {
           <header className="p-4 border-b border-gray-300 flex justify-between items-center  text-black">
             <h1 className="text-2xl font-semibold">Chats</h1>
           </header>
+
           <div className="overflow-y-auto h-screen p-3 mb-9 pb-20">
             {data?.map((i, index) => {
               return (
@@ -234,9 +262,9 @@ const ChatDashboard = () => {
                       {i?.chat[0]?.[i?.userId]?.message}
                     </p>
                   </div>
-                  {unread > 0 && (
+                  {unread[i.userId] && i?.unreadCount > 0 && (
                     <div className="bg-[#3bbb54] text-sm w-5 rounded-full">
-                      {unread}
+                      {i?.unreadCount}
                     </div>
                   )}
                   <Popover>
@@ -261,20 +289,33 @@ const ChatDashboard = () => {
                         className="divide-y divide-white/5 rounded-xl bg-white/5 text-sm/6 [--anchor-gap:var(--spacing-5)]"
                       >
                         <div className="p-3 bg-[#fafafa]">
-                          <div
+                          {/* <div
                             className="block rounded-lg py-2 px-3 transition cursor-pointer hover:bg-gray-100"
-                            onClick={() => setUnread(i?.unreadCount)}
+                            onClick={() => handleSetUnread(i?.userId)}
                           >
                             <p className="font-semibold text-black">
                               Mark as Unread
                             </p>
-                          </div>
-                          <div className="block rounded-lg py-2 px-3 transition cursor-pointer hover:bg-gray-100">
-                            <p className="font-semibold text-black">Delete</p>
-                          </div>
-                          <div className="block rounded-lg py-2 px-3 transition cursor-pointer hover:bg-gray-100">
-                            <p className="font-semibold text-black">Cancel</p>
-                          </div>
+                          </div> */}
+                          <PopoverButton
+                            className="block font-semibold text-black text-start rounded-lg py-2 px-3 transition cursor-pointer hover:bg-gray-100"
+                            onClick={() => handleSetUnread(i?.userId)}
+                          >
+                            Mark as Unread
+                          </PopoverButton>
+                          <PopoverButton
+                            className="w-full font-semibold text-black text-start rounded-lg py-2 px-3 transition cursor-pointer hover:bg-gray-100"
+                            onClick={() => handleDelete(i?.userId)}
+                          >
+                            Delete
+                          </PopoverButton>
+
+                          <PopoverButton
+                            className="w-full font-semibold text-black text-start rounded-lg py-2 px-3 transition cursor-pointer hover:bg-gray-100"
+                            onClick={() => setOpen(false)}
+                          >
+                            Cancel
+                          </PopoverButton>
                         </div>
                       </PopoverPanel>
                     </Transition>
@@ -291,7 +332,7 @@ const ChatDashboard = () => {
          */}
         <div className="flex-1" id="userChat">
           <header className="bg-[#fafafa] p-2 text-gray-700">
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <div className="flex">
                 {arrowBack && (
                   <img
@@ -314,23 +355,24 @@ const ChatDashboard = () => {
               </div>
               <div className="flex gap-2">
                 <img
-                  className="w-8 h-8"
+                  className="w-6 h-6"
                   src="assets/images/video-icon.png"
                   alt="video-icon"
                 />
                 <img
-                  className="w-8 h-8"
+                  className="w-6 h-6"
                   src="assets/images/call-icon.png"
                   alt="call-icon"
                 />
                 <img
-                  className="w-8 h-8"
+                  className="w-6 h-6"
                   src="assets/images/ellipsis.png"
                   alt="ellipsis-icon"
                 />
               </div>
             </div>
           </header>
+
           <div className="h-screen overflow-y-auto p-4 pb-36">
             {selectChat?.chat?.map((chats, index) => {
               return (
