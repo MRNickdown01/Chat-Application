@@ -185,10 +185,7 @@ const ChatDashboard = () => {
    */
 
   const handleClick = (i) => {
-    setOpen(false);
-    if (open === false) {
-      setSelectChat(i);
-    }
+    setSelectChat(i);
     if (window?.innerWidth < 768) {
       const chatList = document?.getElementById("chatList");
       chatList.style.display = "none";
@@ -223,6 +220,16 @@ const ChatDashboard = () => {
     setData(data.filter((user) => user.userId !== userId));
     setOpen(false);
   };
+  /**
+   * handle option return here
+   */
+  const handleOpetion = (i) => {
+    if (open === false) {
+      handleClick(i);
+    } else {
+      return;
+    }
+  };
 
   return (
     <div>
@@ -245,7 +252,7 @@ const ChatDashboard = () => {
                 <div
                   className="flex items-center mb-4 cursor-pointer hover:bg-gray-100 p-2 rounded-md"
                   key={index}
-                  onClick={() => handleClick(i)}
+                  onClick={() => handleOpetion(i)}
                 >
                   <div className="w-12 h-12 bg-gray-300 rounded-full mr-3">
                     <img
