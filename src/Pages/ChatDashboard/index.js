@@ -12,6 +12,7 @@ const ChatDashboard = () => {
   const [open, setOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [arrowBack, setArrowBack] = useState(false);
+  const [unread, setUnread] = useState();
 
   const data = [
     {
@@ -230,10 +231,14 @@ const ChatDashboard = () => {
                       {i?.name}
                     </h2>
                     <p className="text-gray-600 text-start">
-                      {i?.chat[0]?.user1?.message}
+                      {i?.chat[0]?.[i?.userId]?.message}
                     </p>
                   </div>
-
+                  {unread > 0 && (
+                    <div className="bg-[#3bbb54] text-sm w-5 rounded-full">
+                      {unread}
+                    </div>
+                  )}
                   <Popover>
                     <PopoverButton className="text-sm/6 font-semibold text-black/50 focus:outline-none data-[active]:text-black data-[hover]:text-white data-[focus]:outline-1 data-[focus]:outline-white">
                       <img
@@ -256,7 +261,10 @@ const ChatDashboard = () => {
                         className="divide-y divide-white/5 rounded-xl bg-white/5 text-sm/6 [--anchor-gap:var(--spacing-5)]"
                       >
                         <div className="p-3 bg-[#fafafa]">
-                          <div className="block rounded-lg py-2 px-3 transition cursor-pointer hover:bg-gray-100">
+                          <div
+                            className="block rounded-lg py-2 px-3 transition cursor-pointer hover:bg-gray-100"
+                            onClick={() => setUnread(i?.unreadCount)}
+                          >
                             <p className="font-semibold text-black">
                               Mark as Unread
                             </p>
@@ -283,27 +291,45 @@ const ChatDashboard = () => {
          */}
         <div className="flex-1" id="userChat">
           <header className="bg-[#fafafa] p-2 text-gray-700">
-            <div className="flex">
-              {arrowBack && (
+            <div className="flex justify-between">
+              <div className="flex">
+                {arrowBack && (
+                  <img
+                    src="assets/images/back-arrow.png"
+                    className="w-10"
+                    alt="arrow"
+                    onClick={() => arrowBackClick()}
+                  />
+                )}
+                <div className="flex items-center gap-4 w-12 h-12 bg-gray-300 rounded-full mr-3 ">
+                  <img
+                    src={selectChat?.profilePictureURL}
+                    alt="User Avatar"
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                </div>
+                <h1 className="text-2xl font-semibold text-start">
+                  {selectChat?.name}
+                </h1>
+              </div>
+              <div className="flex gap-2">
                 <img
-                  src="assets/images/back-arrow.png"
-                  className="w-10"
-                  alt="arrow"
-                  onClick={() => arrowBackClick()}
+                  className="w-8 h-8"
+                  src="assets/images/video-icon.png"
+                  alt="video-icon"
                 />
-              )}
-              <div className="flex items-center gap-4 w-12 h-12 bg-gray-300 rounded-full mr-3 ">
                 <img
-                  src={selectChat?.profilePictureURL}
-                  alt="User Avatar"
-                  className="w-12 h-12 rounded-full object-cover"
+                  className="w-8 h-8"
+                  src="assets/images/call-icon.png"
+                  alt="call-icon"
+                />
+                <img
+                  className="w-8 h-8"
+                  src="assets/images/ellipsis.png"
+                  alt="ellipsis-icon"
                 />
               </div>
-              <h1 className="text-2xl font-semibold text-start">
-                {selectChat?.name}
-              </h1>
             </div>
-            <div></div>
           </header>
           <div className="h-screen overflow-y-auto p-4 pb-36">
             {selectChat?.chat?.map((chats, index) => {
