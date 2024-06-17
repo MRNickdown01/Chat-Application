@@ -344,7 +344,7 @@ const ChatDashboard = () => {
                 {arrowBack && (
                   <img
                     src="assets/images/back-arrow.png"
-                    className="w-10"
+                    className="w-10 h-10"
                     alt="arrow"
                     onClick={() => arrowBackClick()}
                   />
@@ -408,14 +408,32 @@ const ChatDashboard = () => {
           </div>
 
           <footer className="bg-white border-t border-gray-300 p-4 absolute bottom-0 lg:w-3/4 w-full">
-            <div className="flex items-center">
+            <div className="relative flex items-center gap-2">
+              <div className="border p-2 border-gray-400 rounded-full">
+                <img
+                  src="assets/images/add-icon.png"
+                  alt="add"
+                  className="w-6"
+                />
+              </div>
+              <div className="border p-2 border-gray-400 rounded-full">
+                <img
+                  src="assets/images/voice-icon.png"
+                  alt="voice"
+                  className="w-6"
+                />
+              </div>
               <input
                 type="text"
                 placeholder="Type a message..."
-                className="w-full p-2 rounded-md border border-gray-400 focus:outline-none focus:border-blue-500"
+                className="w-full p-2 pr-10 rounded-full border border-gray-400 focus:outline-none focus:border-blue-500"
               />
-              <button className="bg-indigo-500 text-white px-4 py-2 rounded-md ml-2">
-                Send
+              <button className="absolute right-2 text-white px-2 py-1 rounded-md">
+                <img
+                  src="assets/images/send-icon.png"
+                  alt="send"
+                  className="w-6"
+                />
               </button>
             </div>
           </footer>
